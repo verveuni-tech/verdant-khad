@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* Define design tokens */
+@theme {
+  --color-brand-brown: #5C3A21;
+  --color-brand-green: #2E7D32;
+  --color-brand-blue: #1E88E5;
+  --color-brand-gray: #4B5563;
+  --color-brand-light: #F9FAFB;
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-brand-light text-gray-800 antialiased;
+  font-family: "Poppins";
+
+}
