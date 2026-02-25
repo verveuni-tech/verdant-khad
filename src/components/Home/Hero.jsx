@@ -1,110 +1,74 @@
-import { memo, useState } from "react";
+import { memo, useState, useEffect, useMemo, useRef } from "react";
 
-const weights = [
-  { label: "5 Kg", price: 299 },
-  { label: "25 Kg", price: 1199 },
-  { label: "Bulk (100 Kg)", price: 3999 },
-];
+const AUTOPLAY_DELAY = 4000;
 
 const Hero = memo(function Hero() {
-  const [selected, setSelected] = useState(weights[0]);
+  const slides = useMemo(
+    () => [
+      "https://res.cloudinary.com/dvtbbuxon/image/upload/f_auto,q_auto,w_1600/v1772034986/hero1_y18mkq.jpg",
+      "https://res.cloudinary.com/dvtbbuxon/image/upload/f_auto,q_auto,w_1600/v1772034991/hero2_hee5fu.jpg",
+      "https://res.cloudinary.com/dvtbbuxon/image/upload/f_auto,q_auto,w_1600/v1772034989/hero3_vyeezi.jpg",
+    ],
+    []
+  );
+
+  const [current, setCurrent] = useState(0);
+  const intervalRef = useRef(null);
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, AUTOPLAY_DELAY);
+
+    return () => clearInterval(intervalRef.current);
+  }, [slides.length]);
 
   return (
-    <section className="bg-white py-8 md:py-12">
-      <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+    <section className="relative bg-gradient-to-b from-white to-brand-green/5 py-20 md:py-28">
+      <div className="max-w-6xl mx-auto px-4 text-center">
 
-        {/* LEFT SIDE */}
-        <div className="space-y-6">
-
-          {/* Category Strip */}
-          <div className="flex gap-3 flex-wrap text-xs sm:text-sm">
-            <span className="bg-green-100 text-brand-green px-3 py-1 rounded-full">
-              Organic Compost
-            </span>
-            <span className="bg-gray-100 px-3 py-1 rounded-full">
-              Vermicompost
-            </span>
-            <span className="bg-gray-100 px-3 py-1 rounded-full">
-              Cow Manure
-            </span>
-          </div>
-
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-brand-brown leading-snug">
-            Premium Organic Compost (Chemical-Free)
-          </h1>
-
-          <p className="text-brand-gray text-sm sm:text-base max-w-xl">
-            High nutrient compost ideal for vegetables, fruits, and grains.
-            Improves soil fertility and increases crop yield naturally.
-          </p>
-
-          {/* Trust Info */}
-          <div className="flex gap-6 sm:gap-10 text-xs sm:text-sm text-brand-gray">
-            <div>
-              <p className="font-semibold text-brand-brown">4.8 ★</p>
-              <p>1,200 Reviews</p>
-            </div>
-            <div>
-              <p className="font-semibold text-brand-brown">500+</p>
-              <p>Farmers Served</p>
-            </div>
-            <div>
-              <p className="font-semibold text-brand-brown">Fast</p>
-              <p>Delivery</p>
-            </div>
-          </div>
+        {/* BADGES */}
+        <div className="flex justify-center gap-3 flex-wrap text-xs sm:text-sm mb-6">
+          <span className="bg-green-100 text-brand-green px-4 py-1.5 rounded-full font-medium">
+            100% Organic
+          </span>
+          <span className="bg-gray-100 px-4 py-1.5 rounded-full font-medium">
+            Chemical-Free
+          </span>
+          <span className="bg-gray-100 px-4 py-1.5 rounded-full font-medium">
+            Sustainable Farming
+          </span>
         </div>
 
-        {/* RIGHT SIDE – PRODUCT CARD */}
-        <div className="bg-white rounded-2xl shadow-md p-5 sm:p-6 border border-gray-200">
+        {/* HEADLINE */}
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-brand-brown leading-tight mb-6">
+          Nourish Your Soil.
+          <br className="hidden sm:block" />
+          Grow Naturally.
+        </h1>
 
-          {/* Solid Visual Surface */}
-          <div className="w-full h-56 sm:h-64 md:h-72 rounded-xl mb-6 bg-gradient-to-br from-brand-brown/10 via-brand-green/10 to-brand-blue/10 flex items-center justify-center">
-            <div className="text-center px-6">
-              <p className="text-lg sm:text-xl font-semibold text-brand-brown">
-                Organic Compost
-              </p>
-              <p className="text-xs sm:text-sm text-brand-gray mt-2">
-                Product image coming soon
-              </p>
-            </div>
-          </div>
+        {/* SUBTEXT */}
+        <p className="text-brand-gray max-w-2xl mx-auto text-sm sm:text-base md:text-lg mb-14">
+          Premium organic compost crafted to restore soil health,
+          boost yield, and support sustainable farming practices.
+        </p>
 
-          {/* Price */}
-          <div className="mb-4">
-            <p className="text-xl sm:text-2xl font-bold text-brand-brown">
-              ₹{selected.price}
-            </p>
-            <p className="text-xs sm:text-sm text-gray-500">
-              Inclusive of all taxes
-            </p>
-          </div>
-
-          {/* Weight Options */}
-          <div className="grid grid-cols-3 gap-3 mb-6">
-            {weights.map((w) => (
-              <button
-                key={w.label}
-                onClick={() => setSelected(w)}
-                className={`py-2 rounded-lg border text-xs sm:text-sm font-medium transition ${
-                  selected.label === w.label
-                    ? "bg-brand-green text-white border-brand-green"
-                    : "border-gray-300 hover:border-brand-green"
-                }`}
-              >
-                {w.label}
-              </button>
+        {/* AUTO CAROUSEL */}
+        <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+          <div
+            className="flex transition-transform duration-1000 ease-in-out"
+            style={{ transform: `translateX(-${current * 100}%)` }}
+          >
+            {slides.map((src, index) => (
+              <img
+                key={index}
+                src={src}
+                alt="Organic compost farming"
+                loading="lazy"
+                className="w-full h-72 sm:h-96 md:h-[500px] object-cover flex-shrink-0"
+              />
             ))}
           </div>
-
-          {/* CTA */}
-          <button className="w-full bg-brand-green text-white py-3 rounded-xl font-semibold text-sm sm:text-base hover:bg-green-700 transition">
-            Add to Cart
-          </button>
-
-          <p className="text-xs text-center text-gray-500 mt-3">
-            Delivery within 3–5 days
-          </p>
         </div>
 
       </div>

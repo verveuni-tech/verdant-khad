@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+scripts/config/verdantkhad-admin.json
+scripts

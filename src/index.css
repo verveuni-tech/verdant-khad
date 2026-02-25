@@ -17,5 +17,5 @@ html {
 body {
   @apply bg-brand-light text-gray-800 antialiased;
   font-family: "Poppins";
-
+ 
 }

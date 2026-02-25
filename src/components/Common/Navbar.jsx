@@ -55,12 +55,10 @@ const Navbar = memo(function Navbar() {
               Orders
             </button>
 
-            <button className="hover:text-brand-brown transition">
-              Cart
-            </button>
+         
 
             <button className="bg-green-600 text-white px-5 py-2.5 rounded-xl hover:bg-green-700 transition">
-              Buy Now
+             Cart
             </button>
           </div>
 
@@ -103,12 +101,9 @@ const Navbar = memo(function Navbar() {
               Orders
             </button>
 
-            <button className="block w-full text-left px-2">
-              Cart
-            </button>
-
+           
             <button className="w-full bg-green-600 text-white py-2 rounded-lg">
-              Buy Now
+              Cart
             </button>
           </div>
         )}
